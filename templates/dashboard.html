@@ -1,0 +1,204 @@
+<!-- templates/dashboard.html -->
+<!--
+  Dashboard Page: Displays the personalized results.
+  Receives data from Flask via the `profile` and `results` template variables.
+  In this version, results are placeholder data.
+  AI-generated content will replace the placeholders in the next stage.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Roadmap – SkillPath AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="dashboard-body">
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="nav-logo">🎯</span>
+      <span class="nav-title">SkillPath AI</span>
+    </div>
+    <a href="/" class="btn-outline-sm">← New Profile</a>
+  </nav>
+
+  <!-- ===== DASHBOARD HEADER ===== -->
+  <div class="dashboard-hero">
+    <div class="dashboard-hero-content">
+      <h1>Hey, <span class="highlight">{{ profile.name }}</span>! 👋</h1>
+      <p class="dashboard-subtitle">
+        Here's your personalized roadmap to become a
+        <strong>{{ profile.target_career }}</strong>.
+        Let's get started! 🚀
+      </p>
+      <!-- AI Coming Soon Banner -->
+      <div class="ai-banner">
+        🤖 <strong>AI Integration Coming Soon!</strong>
+        The results below are placeholders. Real AI-generated insights will be
+        added in the next stage of this project.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN DASHBOARD CONTENT ===== -->
+  <main class="dashboard-container">
+
+    <!-- TOP ROW: Profile Summary & Current Skills -->
+    <div class="dashboard-grid-top">
+
+      <!-- Profile Summary Card -->
+      <div class="dash-card profile-card">
+        <div class="card-header">
+          <span class="card-icon">👤</span>
+          <h2>Profile Summary</h2>
+        </div>
+        <div class="profile-details">
+          <div class="profile-item">
+            <span class="profile-label">🎓 Degree</span>
+            <span class="profile-value">{{ profile.degree }}</span>
+          </div>
+          <div class="profile-item">
+            <span class="profile-label">🎯 Target Role</span>
+            <span class="profile-value">{{ profile.target_career }}</span>
+          </div>
+          <div class="profile-item">
+            <span class="profile-label">📊 Experience</span>
+            <span class="profile-value badge badge-blue">{{ profile.experience_level }}</span>
+          </div>
+          <div class="profile-item">
+            <span class="profile-label">⏰ Study Hours/Week</span>
+            <span class="profile-value badge badge-green">{{ profile.study_hours }} hrs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Skills Card -->
+      <div class="dash-card">
+        <div class="card-header">
+          <span class="card-icon">💡</span>
+          <h2>Your Current Skills</h2>
+        </div>
+        <div class="skills-container">
+          {% if profile.skills_list %}
+            {% for skill in profile.skills_list %}
+              <span class="skill-tag skill-tag-current">{{ skill }}</span>
+            {% endfor %}
+          {% else %}
+            <p class="empty-state">No skills listed yet. <a href="/">Update your profile</a> to add your skills.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div><!-- end top row -->
+
+    <!-- SKILLS TO LEARN -->
+    <div class="dash-card">
+      <div class="card-header">
+        <span class="card-icon">📚</span>
+        <h2>Skills to Learn</h2>
+        <span class="card-badge ai-badge">🤖 AI Generated</span>
+      </div>
+      <div class="skills-to-learn-grid">
+        {% for skill in results.skills_to_learn %}
+          <div class="learn-skill-item">
+            <span class="learn-icon">🔹</span>
+            <span>{{ skill }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- PERSONALIZED LEARNING ROADMAP -->
+    <div class="dash-card">
+      <div class="card-header">
+        <span class="card-icon">🗺️</span>
+        <h2>Personalized Learning Roadmap</h2>
+        <span class="card-badge ai-badge">🤖 AI Generated</span>
+      </div>
+      <div class="roadmap-timeline">
+        {% for phase in results.roadmap %}
+          <div class="roadmap-phase">
+            <!-- Phase dot and line -->
+            <div class="phase-indicator">
+              <div class="phase-dot">{{ loop.index }}</div>
+              {% if not loop.last %}
+                <div class="phase-line"></div>
+              {% endif %}
+            </div>
+            <!-- Phase content -->
+            <div class="phase-content">
+              <div class="phase-header">
+                <h3>{{ phase.phase }}</h3>
+                <span class="phase-duration">📅 {{ phase.duration }}</span>
+              </div>
+              <div class="phase-topics">
+                {% for topic in phase.topics %}
+                  <span class="topic-tag">{{ topic }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- BOTTOM ROW: Recommended Projects & Weekly Study Plan -->
+    <div class="dashboard-grid-bottom">
+
+      <!-- Recommended Projects -->
+      <div class="dash-card">
+        <div class="card-header">
+          <span class="card-icon">🛠️</span>
+          <h2>Recommended Projects</h2>
+          <span class="card-badge ai-badge">🤖 AI Generated</span>
+        </div>
+        <ul class="project-list">
+          {% for project in results.projects %}
+            <li class="project-item">
+              <span class="project-icon">🔸</span>
+              <span>{{ project }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Weekly Study Plan -->
+      <div class="dash-card">
+        <div class="card-header">
+          <span class="card-icon">📅</span>
+          <h2>Weekly Study Plan</h2>
+          <span class="card-badge ai-badge">🤖 AI Generated</span>
+        </div>
+        <div class="weekly-plan">
+          {% for item in results.weekly_plan %}
+            <div class="plan-row">
+              <span class="plan-day">{{ item.day }}</span>
+              <span class="plan-task">{{ item.task }}</span>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="study-hours-note">
+          ⏰ Based on your <strong>{{ profile.study_hours }} hours/week</strong> availability.
+        </div>
+      </div>
+
+    </div><!-- end bottom row -->
+
+    <!-- Action Buttons -->
+    <div class="dashboard-actions">
+      <a href="/" class="btn-primary">✏️ Update My Profile</a>
+      <button class="btn-outline" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    </div>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <p>SkillPath AI &copy; 2026 &nbsp;|&nbsp; Built for students, by students 💙</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
