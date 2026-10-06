@@ -2,8 +2,8 @@
 <!--
   Dashboard Page: Displays the personalized results.
   Receives data from Flask via the `profile` and `results` template variables.
-  In this version, results are placeholder data.
-  AI-generated content will replace the placeholders in the next stage.
+  results._is_demo is True  → API unavailable, showing fallback demo data.
+  results._is_demo is False → Live xAI/Grok response was received.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -33,12 +33,18 @@
         <strong>{{ profile.target_career }}</strong>.
         Let's get started! 🚀
       </p>
-      <!-- AI Coming Soon Banner -->
-      <div class="ai-banner">
-        🤖 <strong>AI Integration Coming Soon!</strong>
-        The results below are placeholders. Real AI-generated insights will be
-        added in the next stage of this project.
+      <!-- Dynamic AI Status Banner -->
+      {% if results._is_demo %}
+      <div class="ai-banner ai-banner-demo">
+        ⚠️ <strong>Demo Mode</strong> – XAI_API_KEY not set or API unavailable.
+        Results below are sample data.
+        Add your key to <code>.env</code> to get real AI-powered results.
       </div>
+      {% else %}
+      <div class="ai-banner ai-banner-live">
+        ✅ <strong>Powered by Grok (xAI)</strong> – Your personalized roadmap was generated live by AI.
+      </div>
+      {% endif %}
     </div>
   </div>
 
