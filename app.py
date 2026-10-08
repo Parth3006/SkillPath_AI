@@ -7,7 +7,7 @@ It handles two routes:
   - "/" (Home): Shows the student profile form.
   - "/dashboard": Receives form data, calls the AI service, and shows results.
 
-AI integration: xAI / Grok via ai_service.py
+AI integration: Google Gemini via ai_service.py
 """
 
 from flask import Flask, render_template, request
@@ -53,7 +53,7 @@ def dashboard():
     student_profile["skills_list"] = skills_list
 
     # --- AI RESULTS ---
-    # Calls xAI/Grok API. Falls back to demo data if unavailable.
+    # Calls Google Gemini API. Falls back to demo data if unavailable.
     ai_results = get_ai_results(student_profile)
 
     return render_template(
